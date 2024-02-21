@@ -32,8 +32,8 @@ class HiddenMarkovModel:
         
         # do linear scaling to ensure probabilities sum to 1
         self.prior_p = prior_p / np.sum(prior_p)
-        self.transition_p = transition_p / np.sum(transition_p, axis=1)
-        self.emission_p = emission_p / np.sum(emission_p, axis=1)
+        self.transition_p = transition_p / np.sum(transition_p, axis=1, keepdims=True)
+        self.emission_p = emission_p / np.sum(emission_p, axis=1, keepdims=True)
 
 
     def forward(self, input_observation_states: np.ndarray) -> float:

@@ -19,7 +19,7 @@ def test_mini_weather():
 
     mini_hmm=np.load('./data/mini_weather_hmm.npz')
     mini_input=np.load('./data/mini_weather_sequences.npz')
-    my_hmm = HiddenMarkovModel(mini_input['observation_states'], mini_hmm['hidden_states'], mini_hmm['prior_p'], mini_hmm['transition_p'], mini_hmm['emission_p'])
+    my_hmm = HiddenMarkovModel(mini_hmm['observation_states'], mini_hmm['hidden_states'], mini_hmm['prior_p'], mini_hmm['transition_p'], mini_hmm['emission_p'])
     
     # check that forward algorithm returns correct likelihood
     assert my_hmm.forward(mini_input['observation_state_sequence']) == 0.0350
