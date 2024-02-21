@@ -104,7 +104,6 @@ class HiddenMarkovModel:
                 viterbi_back[s, t] = np.argmax(viterbi_table[:, t-1] + np.log(self.transition_p[:,s]) + np.log(self.emission_p[s, state_idx]))
 
         # Step 3. Traceback
-        print(viterbi_table)
         best_path = []
         s = int(np.argmax(viterbi_table[:, -1]))
         for t in range(decode_observation_states.shape[0]):

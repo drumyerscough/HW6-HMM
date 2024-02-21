@@ -1,3 +1,5 @@
+[![Project Tests](https://github.com/drumyerscough/HW6-HMM/actions/workflows/ci.yml/badge.svg)](https://github.com/drumyerscough/HW6-HMM/actions/workflows/ci.yml)
+
 # HW6-HMM
 
 In this assignment, you'll implement the Forward and Viterbi Algorithms (dynamic programming). 
@@ -44,6 +46,12 @@ Within your code, consider the scope of the inputs and how the different paramet
 
 Finally, please update your README with a brief description of your methods. 
 
+## Methods
+
+This repo contains a module called hmm, which includes a lightweight class for hidden Markov models that can be initialized from arrays containing hidden and observed states, prior probabilities of hidden states, transition probabilities between hidden states, and emission probabilities for each observed state from each hidden state. The hmm class has two methods, forward() and viterbi(), which respectively implement the forward and viterbi algorithms using dynamic programming. The forward algorithm calculates the likelihood of a sequence of observed states given an HMM instance, and the Viterbi algorithm calculates the most likely sequence of hidden states that would produce a given a sequence of observed states.
+
+In more detail:
+The forward algorithm recursively calculates likelihood of a sequence of observed states given all possible sequences of hidden states that could have produced each observed state. Because of the Markov property, each hidden state depends only on the previous hidden state, and each observed state depends only on the current hidden state, so likelihoods can be efficiently calculated for each i-th observed state based on the likelihoods of the (i-1)-th states. Starting from a prior distribution, the likelihood of the observed states for each possible hidden state are accumulated in a table across iterations through the observed state sequence, and the sum over the final column of the table yields the likelihood of the observed sequence. The Viterbi algorithm is similar in concept and implementation to the forward algorithm, but instead of summing over all possible sequences of hidden states that could have produced an observed state, the most likely sequence is taken instead. As in the forward algorithm, the likelihoods for the hidden states are accumulated in a table, and additionally the most likely hidden state transitions are stored in a backtrace table. When the algorithm terminates, the transitions from the most likely ending state to the most likely initial state can be traced to produce the most likely sequence of hidden states to produce the observed states.
 
 
 ## Task List
