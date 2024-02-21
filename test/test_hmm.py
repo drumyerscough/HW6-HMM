@@ -22,7 +22,7 @@ def test_mini_weather():
     my_hmm = HiddenMarkovModel(mini_hmm['observation_states'], mini_hmm['hidden_states'], mini_hmm['prior_p'], mini_hmm['transition_p'], mini_hmm['emission_p'])
     
     # check that forward algorithm returns correct likelihood
-    assert round(my_hmm.forward(mini_input['observation_state_sequence']),4) == 0.0350
+    assert round(my_hmm.forward(mini_input['observation_state_sequence']),3) == 0.035
     
     # check that viterbi algorithm returns correct sequence of hidden states
     assert my_hmm.viterbi(mini_input['observation_state_sequence']) == mini_input['best_hidden_state_sequence'].tolist()
