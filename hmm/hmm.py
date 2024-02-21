@@ -1,6 +1,4 @@
 import numpy as np
-from scipy.special import logsumexp
-
 
 class HiddenMarkovModel:
     """
@@ -33,9 +31,9 @@ class HiddenMarkovModel:
         self.hidden_states_dict = {index: state for index, state in enumerate(list(self.hidden_states))}
         
         # do linear scaling to ensure probabilities sum to 1
-        self.prior_p = prior_p #/ np.sum(prior_p)
-        self.transition_p = transition_p #/ np.sum(transition_p, axis=1)
-        self.emission_p = emission_p# / np.sum(emission_p, axis=1)
+        self.prior_p = prior_p / np.sum(prior_p)
+        self.transition_p = transition_p / np.sum(transition_p, axis=1)
+        self.emission_p = emission_p / np.sum(emission_p, axis=1)
 
 
     def forward(self, input_observation_states: np.ndarray) -> float:
@@ -53,24 +51,21 @@ class HiddenMarkovModel:
         if len(input_observation_states) == 0:
             raise Exception('The input input_observation_states is empty')
         
-        if not set(input_observation_states).is_subset(set(self.observation_states)):
+        if not set(input_observation_states) <= set(self.observation_states):
             raise ValueError('states in input_observation_states are not present in the HMM')
 
         # Step 1. Initialize variables
         fwd_mat = np.zeros((self.hidden_states.shape[0], input_observation_states.shape[0]))
         fwd_mat[:, 0] = self.prior_p * self.emission_p[:, self.observation_states_dict[input_observation_states[0]]]
-        #fwd_mat[:, 0] = np.log(self.prior_p * self.emission_p[:, self.observation_states_dict[input_observation_states[0]]])
 
         # Step 2. Calculate probabilities
         for t in range(1, input_observation_states.shape[0]):
             state_idx = self.observation_states_dict[input_observation_states[t]] # index of observed state in emission_p
             for s in range(self.hidden_states.shape[0]):
                 fwd_mat[s, t] = np.sum(fwd_mat[:, t-1] * self.transition_p[:,s] * self.emission_p[s, state_idx])
-                #fwd_mat[s, t] = logsumexp(fwd_mat[:, t-1] + np.log(self.transition_p[:,s]) + np.log(self.emission_p[:, state_idx]))
 
         # Step 3. Return final probability
         return np.sum(fwd_mat[:, -1])
-        #return np.exp(logsumexp(fwd_mat[:, t]))
 
     def viterbi(self, decode_observation_states: np.ndarray) -> list:
         """
@@ -87,7 +82,7 @@ class HiddenMarkovModel:
         if len(decode_observation_states) == 0:
             raise Exception('The input decode_observation_states is empty')
         
-        if not set(decode_observation_states).is_subset(set(self.observation_states)):
+        if not set(decode_observation_states) <= set(self.observation_states):
             raise ValueError('states in decode_observation_states are not present in the HMM')
         
         # Step 1. Initialize variables
